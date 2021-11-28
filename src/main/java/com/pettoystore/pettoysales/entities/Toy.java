@@ -3,6 +3,7 @@ package com.pettoystore.pettoysales.entities;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,15 +38,13 @@ public class Toy {
   @Column(name = "price")
   private int price;
 
-  /*
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
+  @ManyToMany
   @JoinTable(name = "line_items",
           joinColumns = {
-                  @JoinColumn(name = "orderID", referencedColumnName = "orderID",
-                          nullable = true, updatable = false)},
+                  @JoinColumn(name = "order_id")},
           inverseJoinColumns = {
-                  @JoinColumn(name = "toyID", referencedColumnName = "toyID",
-                          nullable = true, updatable = false)})
-  private List<Order> orders = new ArrayList<>();
-*/
+                  @JoinColumn(name = "toy_id")})
+  private Set<Order> toyorders;
+  
 }

@@ -3,6 +3,7 @@ package com.pettoystore.pettoysales.entities;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,8 +43,8 @@ public class Order {
   
   @Column(name = "total")
   private BigDecimal total;
-/*  
-  @ManyToMany(mappedBy = "orders", fetch = FetchType.LAZY)
-  private List<Toy> Toys = new ArrayList<>();
-*/  
+  
+  @ManyToMany(mappedBy = "toyorders")
+  private Set<Toy> Toys;
+  
 }
