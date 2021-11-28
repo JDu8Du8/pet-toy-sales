@@ -2,7 +2,7 @@ spring:
   datasource: 
     password: "@5hes2@5hes"
     username: root
-    url: jdbc:mysql://localhost:3306/pet_toy_store
+    url: jdbc:mysql://localhost:3306/pet_toy_store_data
 
 springdoc:    
   swagger-ui:

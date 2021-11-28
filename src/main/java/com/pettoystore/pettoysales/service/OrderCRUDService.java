@@ -10,7 +10,7 @@ public interface OrderCRUDService {
 
   Order insertOrder(Order order);
 
-  void updateOrder(int id, Order order);
+  void updateOrder(Order order);
 
   void deleteOrder(int orderID);
 }

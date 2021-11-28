@@ -17,9 +17,8 @@ import com.pettoystore.pettoysales.service.OrderCRUDService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/orders")
 @Slf4j
-public class OrderController {
+public class OrderController implements OrderControllerInterface{
   
   @Autowired
   OrderCRUDService orderCRUDService;
@@ -28,36 +27,29 @@ public class OrderController {
     this.orderCRUDService = orderCRUDService;
   }
   
-  @GetMapping
-  public ResponseEntity<List<Order>> getAllOrders() {
-    List <Order> orders = orderCRUDService.getOrders();
-    return new ResponseEntity<>(orders, HttpStatus.OK);
+  public List<Order> getOrders() {
+    return orderCRUDService.getOrders();
   }
   
-  @GetMapping({"/{orderID}"})
-  public ResponseEntity<Order> getOrder(@PathVariable int orderID){
+  public ResponseEntity<Order> getOrderbyId(int orderID){
     return new ResponseEntity<>(orderCRUDService.getOrderById(orderID), HttpStatus.OK);
   }
   
   
-  public ResponseEntity<Order> saveOrder(@RequestBody Order order) {
+  public ResponseEntity<Order> saveOrder(Order order) {
     Order order1 = orderCRUDService.insertOrder(order);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add("order", "/api/v1/order/" + order1.getOrderID());
     return new ResponseEntity<>(order1, httpHeaders, HttpStatus.CREATED);
   }
   
-  @PutMapping({"/{orderID}"})
-  public ResponseEntity<Order> updateOrder(@PathVariable("orderID") int orderID, 
-    @RequestBody Order order){
-      orderCRUDService.updateOrder(orderID, order);
-      return new ResponseEntity<>(orderCRUDService.getOrderById(orderID), 
-          HttpStatus.OK);
+  public ResponseEntity<Order> updateOrder(Order order){
+      orderCRUDService.updateOrder(order);
+      return new ResponseEntity<>(HttpStatus.OK);
   
   }
   
-  @DeleteMapping({"/{orderID}"})
-  public ResponseEntity<Order> deleteOrder(@PathVariable("orderID") int orderID){
+  public ResponseEntity<Order> deleteOrder(int orderID){
     orderCRUDService.deleteOrder(orderID);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

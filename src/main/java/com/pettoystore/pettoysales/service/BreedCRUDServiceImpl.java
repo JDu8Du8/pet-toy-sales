@@ -1,9 +1,14 @@
 package com.pettoystore.pettoysales.service;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.pettoystore.pettoysales.entities.Breed;
 import com.pettoystore.pettoysales.repositories.BreedRepository;
 
@@ -31,11 +36,13 @@ public class BreedCRUDServiceImpl implements BreedCRUDService {
   }
 
   @Override
-  public Breed insertBreed(Breed breed) 
-  {
-    return breedRepository.save(breed);
+  public Breed insertBreed(String description) {
+    Breed newBreed = new Breed();
+    newBreed.setDescription(description);
+    breedRepository.save(newBreed);
+    return newBreed;
   }
-
+  
   @Override
   public void updateBreed(Breed breed) {
     Breed breedFromDB = breedRepository.findById(breed.getBreedID()).get();

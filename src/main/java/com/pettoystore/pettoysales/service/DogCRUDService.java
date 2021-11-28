@@ -9,9 +9,9 @@ public interface DogCRUDService {
 
   Dog getDogById(int petID);
 
-  Dog insertDog(Dog dog);
+  Dog insertDog(int customerID, int breedID, String name);
 
-  void updateDog(int petID, Dog dog);
+  void updateDog(Dog dog);
 
   void deleteDog(int petID);
 }

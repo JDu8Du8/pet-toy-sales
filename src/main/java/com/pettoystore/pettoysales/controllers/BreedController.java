@@ -1,5 +1,6 @@
 package com.pettoystore.pettoysales.controllers;
 
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.pettoystore.pettoysales.entities.Breed;
+import com.pettoystore.pettoysales.entities.Toy;
 import com.pettoystore.pettoysales.service.BreedCRUDService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,13 +50,11 @@ public class BreedController implements BreedControllerInterface{
   
 // Adds a Breed
   @Override
-  public ResponseEntity<Breed> saveBreed(Breed breed) {
-    
-    Breed breed1 = new Breed();
-    if (breed.getBreedID() == 0)
-      breed.setBreedID((Integer) null);
-    breed1.setDescription(breed.getDescription());
-    return new ResponseEntity<Breed>(breedCRUDService.insertBreed(breed1), HttpStatus.CREATED);
+  public ResponseEntity<Breed> saveBreed(String description) {
+    Breed newBreed = breedCRUDService.insertBreed(description);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(newBreed.getBreedID()).toUri();
+    return ResponseEntity.created(location).build();
   }
   
   public ResponseEntity<Breed> updateBreed(Breed breed){

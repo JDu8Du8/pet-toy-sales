@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pettoystore.pettoysales.entities.Order;
 import com.pettoystore.pettoysales.repositories.OrderRepository;
+import com.pettoystore.pettoysales.repositories.ToyRepository;
 
 @Service
 public class OrderCRUDServiceImpl implements OrderCRUDService {
 
   @Autowired
   OrderRepository orderRepository;
+  
+  @Autowired
+  ToyRepository toyRepository;
   
   public OrderCRUDServiceImpl (OrderRepository orderRepository) {
     this.orderRepository = orderRepository;
@@ -35,8 +39,8 @@ public class OrderCRUDServiceImpl implements OrderCRUDService {
   }
 
   @Override
-  public void updateOrder(int id, Order order) {
-    Order orderFromDB = orderRepository.findById(id).get();
+  public void updateOrder(Order order) {
+    Order orderFromDB = orderRepository.findById(order.getOrderID()).get();
     System.out.println(orderFromDB.toString());
     orderFromDB.setCustID(order.getCustID());
     orderFromDB.setToyID(order.getToyID());

@@ -1,5 +1,6 @@
 package com.pettoystore.pettoysales.controllers;
 
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.pettoystore.pettoysales.entities.Customer;
 import com.pettoystore.pettoysales.service.CustomerCRUDService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/customers")
 @Slf4j
-public class CustomerController {
+public class CustomerController implements CustomerControllerInterface{
   
   @Autowired
   CustomerCRUDService customerCRUDService;
@@ -28,37 +30,30 @@ public class CustomerController {
     this.customerCRUDService = customerCRUDService;
   }
   
-  @GetMapping
-  public ResponseEntity<List<Customer>> getAllCustomers() {
-    List <Customer> customers = customerCRUDService.getCustomers();
-    return new ResponseEntity<>(customers, HttpStatus.OK);
+  public List<Customer> getCustomers() {
+    return customerCRUDService.getCustomers();
   }
   
-  
-  @GetMapping({"/{custID}"})
-  public ResponseEntity<Customer> getCustomer(@PathVariable int customerID){
+  public ResponseEntity<Customer> getCustomerbyId(int customerID){
     return new ResponseEntity<>(customerCRUDService.getCustomerById(customerID), HttpStatus.OK);
   }
   
   
-  public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer) {
-    Customer customer1 = customerCRUDService.insertCustomer(customer);
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.add("customer", "/api/v1/customer/" + customer1.getCustomerID());
-    return new ResponseEntity<>(customer1, httpHeaders, HttpStatus.CREATED);
+  public ResponseEntity<Customer> saveCustomer(String firstName, 
+      String lastName, String address) {
+    Customer newCustomer = customerCRUDService.insertCustomer(firstName, lastName, address);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(newCustomer.getCustomerID()).toUri();
+    return ResponseEntity.created(location).build();
   }
   
-  @PutMapping({"/{customerID}"})
-  public ResponseEntity<Customer> updateCustomer(@PathVariable("customerID") int customerID, 
-    @RequestBody Customer customer){
-      customerCRUDService.updateCustomer(customerID, customer);
-      return new ResponseEntity<>(customerCRUDService.getCustomerById(customerID), 
-          HttpStatus.OK);
+  public ResponseEntity<Customer> updateCustomer(Customer customer){
+      customerCRUDService.updateCustomer(customer);
+      return new ResponseEntity<>(HttpStatus.OK);
   
   }
   
-  @DeleteMapping({"/{customerID}"})
-  public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerID") int customerID){
+  public ResponseEntity<Customer> deleteCustomer(int customerID){
     customerCRUDService.deleteCustomer(customerID);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import com.pettoystore.pettoysales.entities.Breed;
+import com.pettoystore.pettoysales.entities.Dog;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,27 +24,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 
-@RequestMapping("/breeds")
+@RequestMapping("/dogs")
 @Validated
 @OpenAPIDefinition(info = @Info(title = "Pet Toy Store"), 
   servers = {@Server(url = "http://localhost:8080", 
   description = "Pet Toy Store" )})
-public interface BreedControllerInterface {
+public interface DogControllerInterface {
 
   @Operation(
-      summary = "Returns a list of Breeds",
-      description = "Returns a list of Breeds",
+      summary = "Returns a list of Dogs",
+      description = "Returns a list of Dogs",
       responses = {
           @ApiResponse(responseCode = "200", 
-              description = "A list of Breeds is returned", 
+              description = "A list of Dogs is returned", 
               content = @Content(
                   mediaType = "application/json",
-              schema = @Schema(implementation = Breed.class))),
+              schema = @Schema(implementation = Dog.class))),
           @ApiResponse(responseCode = "400", 
           description = "Request Parameters Invalid", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "404", 
-          description = "No Breeds Found with Criteria", 
+          description = "No Dogs Found with Criteria", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "500", 
           description = "An unplanned error occurred", 
@@ -54,43 +53,43 @@ public interface BreedControllerInterface {
       )
   @GetMapping
   @ResponseStatus(code = HttpStatus.OK)
-    List<Breed> getBreeds();
+    List<Dog> getDogs();
   
-  @Operation(summary = "Get Breed by ID",
-      description = "Get Breed by ID",
+  @Operation(summary = "Get Dog by ID",
+      description = "Get Dog by ID",
       responses = {
           @ApiResponse(responseCode = "200", 
-              description = "A Breed is Returned", 
+              description = "A Dog is Returned", 
               content = @Content(
                   mediaType = "application/json",
-              schema = @Schema(implementation = Breed.class))),
+              schema = @Schema(implementation = Dog.class))),
           @ApiResponse(responseCode = "400", 
           description = "Request Parameters Invalid", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "404", 
-          description = "No Breeds Found with Criteria", 
+          description = "No Dogs Found with Criteria", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "500", 
           description = "An unplanned error occurred", 
               content = @Content(mediaType = "application/json"))
       })
-  @GetMapping({"/{breedID}"})
-  public ResponseEntity<Breed> getBreedbyId(@Parameter (description = "ID of Breed to Find")
-   @PathVariable int breedID);
+  @GetMapping({"/{dogID}"})
+  public ResponseEntity<Dog> getDogbyId(@Parameter (description = "ID of Dog to Find")
+   @PathVariable int dogID);
 
-  @Operation(summary = "Add a Breed",
-      description = "Add a Breed",
+  @Operation(summary = "Add a Dog",
+      description = "Add a Dog",
       responses = {
-          @ApiResponse(responseCode = "201", 
-              description = "Breed Added", 
+          @ApiResponse(responseCode = "200", 
+              description = "Dog Added", 
               content = @Content(
                   mediaType = "application/json",
-              schema = @Schema(implementation = Breed.class))),
+              schema = @Schema(implementation = Dog.class))),
           @ApiResponse(responseCode = "400", 
           description = "Request Parameters Invalid", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "404", 
-          description = "No Breeds Found with Criteria", 
+          description = "No Dogs Found with Criteria", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "500", 
           description = "An unplanned error occurred", 
@@ -100,22 +99,23 @@ public interface BreedControllerInterface {
   @PostMapping
   @Transactional
   @Validated
-  public ResponseEntity<Breed> saveBreed(@RequestParam String description);
+  public ResponseEntity<Dog> saveDog(@RequestParam int customerID, 
+      @RequestParam int breedID, @RequestParam String name);
   
 //PUT
-  @Operation(summary = "Update a Breed",
-      description = "Update a Breed",
+  @Operation(summary = "Update a Dog",
+      description = "Update a Dog",
       responses = {
           @ApiResponse(responseCode = "202", 
-              description = "Breed Updated", 
+              description = "Dog Updated", 
               content = @Content(
                   mediaType = "application/json",
-              schema = @Schema(implementation = Breed.class))),
+              schema = @Schema(implementation = Dog.class))),
           @ApiResponse(responseCode = "400", 
           description = "Request Parameters Invalid", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "404", 
-          description = "No Breeds Found with Criteria", 
+          description = "No Dogs Found with Criteria", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "500", 
           description = "An unplanned error occurred", 
@@ -124,26 +124,26 @@ public interface BreedControllerInterface {
   ) 
   @PutMapping
   @Transactional
-  public ResponseEntity<Breed> updateBreed(@RequestBody Breed breed);
+  public ResponseEntity<Dog> updateDog(@RequestBody Dog Dog);
 
 //DELETE
-  @Operation(summary = "Delete a Breed",
-      description = "Delete a Breed",
+  @Operation(summary = "Delete a Dog",
+      description = "Delete a Dog",
       responses = {
           @ApiResponse(responseCode = "200", 
-              description = "Breed Deleted"),
+              description = "Dog Deleted"),
           @ApiResponse(responseCode = "400", 
           description = "Request Parameters Invalid", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "404", 
-          description = "No Breeds Found with Criteria", 
+          description = "No Dogs Found with Criteria", 
               content = @Content(mediaType = "application/json")),
           @ApiResponse(responseCode = "500", 
           description = "An unplanned error occurred", 
               content = @Content(mediaType = "application/json"))
       }
       ) 
-  @DeleteMapping({"/{breedID}"})
-  public ResponseEntity<Breed> deleteBreed(@Parameter (description = "ID of Breed to Delete")
-   @PathVariable("breedID") int breedID);
+  @DeleteMapping({"/{dogID}"})
+  public ResponseEntity<Dog> deleteDog(@Parameter (description = "ID of Dog to Delete")
+   @PathVariable("dogID") int dogID);
 }

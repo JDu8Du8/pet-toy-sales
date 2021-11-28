@@ -1,6 +1,7 @@
 package com.pettoystore.pettoysales.service;
 
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 import com.pettoystore.pettoysales.entities.Breed;
 
 
@@ -10,7 +11,7 @@ public interface BreedCRUDService {
 
   Breed getBreedById(int id);
 
-  Breed insertBreed(Breed breed);
+  Breed insertBreed(String description);
 
   public void updateBreed(Breed breed);
 

@@ -1,5 +1,6 @@
 package com.pettoystore.pettoysales.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,12 @@ public class ToyCRUDServiceImpl implements ToyCRUDService {
   }
 
   @Override
-  public Toy insertToy(Toy toy) {
-    return toyRepository.save(toy);
+  public Toy insertToy(String description, int price) {
+    Toy newToy = new Toy();
+    newToy.setDescription(description);
+    newToy.setPrice(price);
+    toyRepository.save(newToy);
+    return newToy;
   }
 
   @Override

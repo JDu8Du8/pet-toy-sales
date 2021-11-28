@@ -10,9 +10,9 @@ public interface CustomerCRUDService {
 
   Customer getCustomerById(int id);
 
-  Customer insertCustomer(Customer Customer);
+  Customer insertCustomer(String firstName, String lastName, String address);
 
-  void updateCustomer(int id, Customer Customer);
+  void updateCustomer(Customer Customer);
 
   void deleteCustomer(int CustomerID);
 }

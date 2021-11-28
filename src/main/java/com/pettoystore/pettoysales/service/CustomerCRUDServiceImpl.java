@@ -31,13 +31,18 @@ public class CustomerCRUDServiceImpl implements CustomerCRUDService {
   }
 
   @Override
-  public Customer insertCustomer(Customer customer) {
-    return customerRepository.save(customer);
+  public Customer insertCustomer(String firstName, String lastName, String address) {
+    Customer newCustomer = new Customer();
+    newCustomer.setFirstName(firstName);
+    newCustomer.setLastName(lastName);
+    newCustomer.setAddress(address);
+    customerRepository.save(newCustomer);
+    return newCustomer;
   }
 
   @Override
-  public void updateCustomer(int id, Customer customer) {
-    Customer customerFromDB = customerRepository.findById(id).get();
+  public void updateCustomer(Customer customer) {
+    Customer customerFromDB = customerRepository.findById(customer.getCustomerID()).get();
     System.out.println(customerFromDB.toString());
     customerFromDB.setFirstName(customer.getFirstName());
     customerFromDB.setLastName(customer.getLastName());

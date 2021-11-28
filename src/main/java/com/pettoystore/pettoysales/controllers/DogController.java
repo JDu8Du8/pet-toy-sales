@@ -1,5 +1,6 @@
 package com.pettoystore.pettoysales.controllers;
 
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.pettoystore.pettoysales.entities.Dog;
 import com.pettoystore.pettoysales.service.DogCRUDService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/dogs")
 @Slf4j
-public class DogController {
+public class DogController implements DogControllerInterface{
   
   @Autowired
   DogCRUDService dogCRUDService;
@@ -28,36 +30,27 @@ public class DogController {
     this.dogCRUDService = dogCRUDService;
   }
   
-  
-  @GetMapping
-  public ResponseEntity<List<Dog>> getAllDog() {
-    List <Dog> dogs = dogCRUDService.getDogs();
-    return new ResponseEntity<>(dogs, HttpStatus.OK);
+  public List<Dog> getDogs() {
+    return dogCRUDService.getDogs();
   }
   
-  @GetMapping({"/{dogID}"})
-  public ResponseEntity<Dog> getDog(@PathVariable int dogID){
+  public ResponseEntity<Dog> getDogbyId(int dogID){
     return new ResponseEntity<>(dogCRUDService.getDogById(dogID), HttpStatus.OK);
   }
   
-  public ResponseEntity<Dog> saveDog(@RequestBody Dog dog) {
-    Dog dog1 = dogCRUDService.insertDog(dog);
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.add("dog", "/dog" + dog1.getPetID());
-    return new ResponseEntity<>(dog1, httpHeaders, HttpStatus.CREATED);
+  public ResponseEntity<Dog> saveDog(int customerID, int breedID, String name) {
+    Dog newDog = dogCRUDService.insertDog(customerID, breedID, name);
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(newDog.getBreedID()).toUri();
+    return ResponseEntity.created(location).build();
   }
   
-  @PutMapping({"/{dogID}"})
-  public ResponseEntity<Dog> updateDog(@PathVariable("dogID") int dogID, 
-    @RequestBody Dog dog){
-      dogCRUDService.updateDog(dogID, dog);
-      return new ResponseEntity<>(dogCRUDService.getDogById(dogID), 
-          HttpStatus.OK);
-  
+  public ResponseEntity<Dog> updateDog(Dog dog){
+      dogCRUDService.updateDog(dog);
+      return new ResponseEntity<>(HttpStatus.OK);
   }
   
-  @DeleteMapping({"/{dogID}"})
-  public ResponseEntity<Dog> deleteDog(@PathVariable("dogID") int dogID){
+  public ResponseEntity<Dog> deleteDog(int dogID){
     dogCRUDService.deleteDog(dogID);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

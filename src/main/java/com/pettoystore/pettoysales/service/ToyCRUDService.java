@@ -1,6 +1,8 @@
 package com.pettoystore.pettoysales.service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 import com.pettoystore.pettoysales.entities.Toy;
 
 public interface ToyCRUDService {
@@ -8,7 +10,7 @@ public interface ToyCRUDService {
 
   Toy getToyById(int id);
 
-  Toy insertToy(Toy toy);
+  Toy insertToy(String description, int price);
 
   void updateToy(int id, Toy toy);
 
