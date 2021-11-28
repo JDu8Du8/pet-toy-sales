@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +33,8 @@ import lombok.Setter;
 @Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+property = "orderID")
 public class Order {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +52,22 @@ public class Order {
   
   @Column(name = "total")
   private BigDecimal total;
-  
-  /* @ManyToMany(mappedBy = "orders")
-  @JoinTable(name = "line_items",
-          joinColumns = {
-                  @JoinColumn(name = "order_id")},
-          inverseJoinColumns = {
-                  @JoinColumn(name = "toy_id")}) 
-  @ManyToMany(mappedBy = "toys")
+ 
+   @ManyToMany(targetEntity = Toy.class,
+       cascade = CascadeType.ALL)
+   @JoinTable(name = "line_items",
+   joinColumns = @JoinColumn(name = "order_ID"),
+   inverseJoinColumns = @JoinColumn(name = "toy_ID"))
+   @JsonIgnore
   private Set<Toy> toys = new HashSet<>();
-  */
+  
+   public void addToy(Toy toy) {
+     toys.add(toy);
+     toy.getOrders().add(this);
+   }
+   
+   public void removeToy(Toy toy) {
+     toys.remove(toy);
+     toy.getOrders().remove(this);
+   }
 }

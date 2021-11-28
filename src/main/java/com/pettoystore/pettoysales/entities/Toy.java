@@ -18,6 +18,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +31,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "toys")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+property = "toyID")
 public class Toy {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,15 +45,11 @@ public class Toy {
   @Column(name = "price")
   private int price;
 
-/*
-   @ManyToMany(mappedBy = "toys")
+
+   @ManyToMany(targetEntity = Order.class, 
+       cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
+       mappedBy = "toys")
+   @JsonIgnore
+  private Set<Order> orders = new HashSet<>();
   
-  @ManyToMany
-  @JoinTable(name = "line_items",
-          joinColumns = {
-                  @JoinColumn(name = "order_id")},
-          inverseJoinColumns = {
-                  @JoinColumn(name = "toy_id")})
-  private ResultSet<Order> orders;
-  */
 }
