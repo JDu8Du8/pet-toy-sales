@@ -1,7 +1,9 @@
 package com.pettoystore.pettoysales.entities;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -38,13 +40,15 @@ public class Toy {
   @Column(name = "price")
   private int price;
 
-
+/*
+   @ManyToMany(mappedBy = "toys")
+  
   @ManyToMany
   @JoinTable(name = "line_items",
           joinColumns = {
                   @JoinColumn(name = "order_id")},
           inverseJoinColumns = {
                   @JoinColumn(name = "toy_id")})
-  private Set<Order> toyorders;
-  
+  private ResultSet<Order> orders;
+  */
 }

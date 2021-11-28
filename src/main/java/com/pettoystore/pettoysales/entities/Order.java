@@ -2,6 +2,7 @@ package com.pettoystore.pettoysales.entities;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +47,13 @@ public class Order {
   @Column(name = "total")
   private BigDecimal total;
   
-  @ManyToMany(mappedBy = "toyorders")
-  private Set<Toy> Toys;
-  
+  /* @ManyToMany(mappedBy = "orders")
+  @JoinTable(name = "line_items",
+          joinColumns = {
+                  @JoinColumn(name = "order_id")},
+          inverseJoinColumns = {
+                  @JoinColumn(name = "toy_id")}) 
+  @ManyToMany(mappedBy = "toys")
+  private Set<Toy> toys = new HashSet<>();
+  */
 }
