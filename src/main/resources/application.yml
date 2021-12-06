@@ -1,6 +1,6 @@
 spring:
   datasource: 
-    password: "@5hes2@5hes"
+    password: root
     username: root
     url: jdbc:mysql://localhost:3306/pet_toy_store_data
 
